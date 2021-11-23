@@ -1,34 +1,28 @@
 import React from "react";
 import Taskinput from "./TaskInput";
 import Task from "./Task";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addTaskAction,
+  doneTaskAction,
+  deleteTaskAction,
+} from "./redux/actions/actionTasks";
 
 function App() {
-  const [state, setState] = React.useState([
-    { id: 0, tittle: "Новое задание 1", done: false },
-    { id: 1, tittle: "Новое задание 2", done: true },
-    { id: 2, tittle: "Новое задание 3", done: false },
-  ]);
+  const state = useSelector((tasks) => tasks);
+
+  const dispatch = useDispatch();
 
   const addTask = (task) => {
-    let newTask = {
-      id: state.length !== 0 ? state.length : 0,
-      tittle: task,
-      done: false,
-    };
-
-    setState([...state, newTask]);
+    dispatch(addTaskAction(task));
   };
 
   const doneTask = (id) => {
-    const index = state.map((task) => task.id).indexOf(id);
-    state[index].done = true;
-    setState([...state]);
+    dispatch(doneTaskAction(id));
   };
 
   const deleteTask = (id) => {
-    let newState = state.filter((task) => task.id !== id);
-
-    setState([...newState]);
+    dispatch(deleteTaskAction(id));
   };
 
   const activeTasks = state.filter((item) => !item.done);
